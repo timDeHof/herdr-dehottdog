@@ -172,7 +172,7 @@
           "id": "agents",
           "type": "block",
           "content": {
-            "mod": "agents"
+            "mod": "dehottdog-agents"
           },
           "size": {
             "weight": 1
