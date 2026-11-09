@@ -18,7 +18,7 @@ Left to right:
      - The active tab's panes as cards: 10px corners, `background` fill, 1px `border` edge, 1px `accent` edge on the focused pane, 8px between panes. Each pane has a 30px header on top drawn by the `pane` mod, shown all the time. A tab's only pane gets a card too.
      - Files/Changes panel, 368px (280 to 900px), hidden until opened from the tab bar. A stack of the `files` and `changes` mods.
    - Status bar, 28px: the `workspace-status` mod.
-3. **Right sidebar**, 268px wide (44 to 480px), `chrome` background: the `dehottdog-agents` mod (a clone of Herdr's `agents`) filling the whole column. Below 160px wide it draws a narrow rail: a count and one status icon per agent, with a `«` button at the bottom.
+3. **Right sidebar**, 268px wide (44 to 480px), `chrome` background: the `dehottdog-agents` mod (a clone of Herdr's `agents`) filling the whole column. Its header shows "Agents", the sort clock and a fold button with a right-hand sidebar icon (26px, 15px icon, `muted`, `hover` background), mirroring the left sidebar's toggle. Below 160px wide it draws a narrow rail: a count and one status icon per agent, with a `«` button at the bottom.
 
 The root is a row on `canvas` with a 1px `border` divider between columns, no system title bar, and `[14, 12]` terminal padding. The layout sets no theme, fonts or text size, so the person's `settings.json` decides them.
 
@@ -33,7 +33,7 @@ The root is a row on `canvas` with a 1px `border` divider between columns, no sy
 - Clicking an agent focuses its pane.
 - `cmd-b` (Herdr's default key) toggles the left sidebar. `cmd-shift-b` toggles the right sidebar (`layout.toggle:right-sidebar`), only in this layout.
 - Files and Changes in the tab bar open the right-hand panel inside the work column.
-- The agents column goes to its rail when it is narrower than 160px, whatever the left sidebar's width. In the rail, `«` widens it to 268px. The expanded column has no fold button, as in Herdr's `agents` mod.
+- The agents column goes to its rail when it is narrower than 160px, whatever the left sidebar's width. The fold button in its header folds it to a 44px rail and remembers the width it had. In the rail, `«` widens it back to that width (268px if it was never folded with the button).
 
 ## Built from
 
@@ -43,19 +43,21 @@ The root is a row on `canvas` with a 1px `border` divider between columns, no sy
   - `"preview": "layouts/dehottdog.svg"` on the root.
 - Node tree: `root` (row) > `sidebar` (column: `brand`, `sidebar-lists` > `spaces`, `sidebar-footer`), `work` (column: `tabs`, `work-body` row > `main` + `panel` stack of `files`/`changes`, `status`), `right-sidebar` (column: `agents`).
 - Shipped mods: `workspace-chrome`, `spaces`, `tabs`, `pane`, `files`, `changes`, `workspace-status`.
-- Its own mod, `mods/dehottdog-agents/`, cloned from Herdr's `agents` (0.1.14) with `mod.clone {"name":"agents","as":"dehottdog-agents"}`. Two changes in `main.js`:
+- Its own mod, `mods/dehottdog-agents/`, cloned from Herdr's `agents` (0.1.14) with `mod.clone {"name":"agents","as":"dehottdog-agents"}`. Changes in `main.js`:
   - `narrow()` reads the width of the `right-sidebar` node instead of `sidebar`.
-  - `toggleSidebar()` (the rail's button) resizes `right-sidebar` instead of `sidebar`, reads shared `right-sidebar.width` (268px when unset), folds to 44px on every platform, and no longer sets shared `sidebar.collapsed`. The button shows only in the rail, so its save-width and fold branches are never reached from it.
+  - `toggleSidebar()` resizes `right-sidebar` instead of `sidebar`. Folding saves the column's width in shared `right-sidebar.width` and resizes it to 44px on every platform. Widening restores that width (268px when unset). It no longer sets shared `sidebar.collapsed`.
+  - A fold button (`sidebar-toggle`) in the expanded header, after the sort clock, calls `toggleSidebar()`. Its icon is `mods/dehottdog-agents/sidebar-right.svg`.
   - The rail's button shows `«` instead of `»`.
   - It still draws its icons from `mods/workspace-chrome/` and opens its sort menu as a `dehottdog-agents` popup.
 - `keys.json`: a `layout:dehottdog` section with `"cmd-shift-b": "layout.toggle:right-sidebar"`.
-- Art: `layouts/dehottdog.svg`, a 320×200 sketch of the window for the settings screen, in fixed dark colors.
+- Art: `layouts/dehottdog.svg`, a 320×200 sketch of the window for the settings screen, in fixed dark colors. `mods/dehottdog-agents/sidebar-right.svg`, Herdr's `workspace-chrome/sidebar.svg` with the divider moved from x 9.5 to 14.5.
 
 ## Watch out
 
 - Herdr's shipped `agents` mod decides whether to draw its rail from the width of the node with id `sidebar`, the left one. Used on the right, it follows the left sidebar's width and its `»` button resizes the left sidebar. That is why this layout ships `dehottdog-agents`. Don't point the block back at `agents`.
 - `dehottdog-agents` is a clone: Herdr never updates it, so it won't get fixes made to `agents` in later versions.
-- The rail's button shows `«`, the way the column widens. Nothing saves `right-sidebar.width`, so it always widens to 268px.
+- The rail's button shows `«`, the way the column widens.
+- Only the fold button saves `right-sidebar.width`. Narrowing the column another way (dragging, `layout.resize`) doesn't, so `«` then restores the width saved at the last fold, or 268px.
 - `cmd-b` and the sidebar button in the brand bar affect only the left sidebar. The agents column has its own key.
 - Merging `keys.json` makes the person's keys file their own. Herdr stops adding new default shortcuts to it on upgrade.
 - The preview SVG doesn't follow the theme or light mode.
@@ -70,5 +72,6 @@ The root is a row on `canvas` with a 1px `border` divider between columns, no sy
 - Settings → Look shows the dehottdog picture on its layout card.
 - `herdr-app check mods/dehottdog-agents` passes.
 - `layout.resize {"id":"right-sidebar","px":120}` turns the agents column into its rail. `layout.resize {"id":"sidebar","px":76}` leaves it a full list.
-- Clicking `«` in the rail widens the agents column again, and the left sidebar doesn't move.
+- Clicking the fold button folds the agents column to a 44px rail, and the left sidebar doesn't move.
+- Clicking `«` in the rail widens the agents column back to its width before folding, and the left sidebar doesn't move.
 - An agent going working, blocked and done shows the spinner, "Needs you" pill and dot in the right column.

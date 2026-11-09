@@ -433,14 +433,35 @@ export default class Agents extends View {
             .justify_between()
             .child(div().text_size(11.5).font_medium().text_color(t.dim).child("Agents"))
             .child(
-              div()
-                .id("ag-sort")
-                .text_size(11)
-                .text_color(t.dim)
-                .hover((s) => s.text_color(t.foreground))
-                .on_click(() => openOverlay({ mod: "dehottdog-agents", kind: "popup", width: 200, height: 140, props: { sortMenu: true } }))
-                .tooltip(`Sort agents: ${sort.label}`)
-                .child(svg(`mods/workspace-chrome/${sort.icon}.svg`).size(14)),
+              h_flex()
+                .gap(4)
+                .items_center()
+                .child(
+                  div()
+                    .id("ag-sort")
+                    .text_size(11)
+                    .text_color(t.dim)
+                    .hover((s) => s.text_color(t.foreground))
+                    .on_click(() => openOverlay({ mod: "dehottdog-agents", kind: "popup", width: 200, height: 140, props: { sortMenu: true } }))
+                    .tooltip(`Sort agents: ${sort.label}`)
+                    .child(svg(`mods/workspace-chrome/${sort.icon}.svg`).size(14)),
+                )
+                // Mirrors the left sidebar's toggle in workspace-chrome.
+                .child(
+                  div()
+                    .id("sidebar-toggle")
+                    .size(26)
+                    .flex_none()
+                    .flex()
+                    .items_center()
+                    .justify_center()
+                    .rounded(6)
+                    .text_color(t.muted)
+                    .hover((s) => s.bg(t.hover).text_color(t.foreground))
+                    .on_click(toggleSidebar)
+                    .tooltip("Fold agents")
+                    .child(svg("mods/dehottdog-agents/sidebar-right.svg").size(15)),
+                ),
             ),
         ),
       )
