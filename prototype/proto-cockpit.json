@@ -1,0 +1,27 @@
+{
+  "id": "root",
+  "type": "row",
+  "background": "canvas",
+  "divider": { "width": 1, "color": "border" },
+  "titlebar": "none",
+  "traffic_lights": [12, 16],
+  "terminal_padding": [14, 12],
+  "children": [
+    {
+      "id": "rail", "type": "column", "size": { "px": 320 }, "min": 220, "max": 520, "background": "chrome",
+      "divider": { "width": 1, "color": "border" },
+      "children": [
+        { "id": "brand", "type": "block", "size": { "px": 46 }, "window_drag": true, "content": { "mod": "workspace-chrome" } },
+        { "id": "agents", "type": "block", "size": { "weight": 3 }, "content": { "mod": "agents" } },
+        { "id": "spaces", "type": "block", "size": { "weight": 1 }, "min": 90, "content": { "mod": "spaces" } }
+      ]
+    },
+    {
+      "id": "work", "type": "column", "resizable": false,
+      "children": [
+        { "id": "watch", "type": "block", "padding": 8, "content": { "agent": "focused" } },
+        { "id": "status", "type": "block", "size": { "px": 28 }, "content": { "mod": "workspace-status" } }
+      ]
+    }
+  ]
+}

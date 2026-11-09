@@ -1,0 +1,22 @@
+{
+  "id": "root",
+  "type": "column",
+  "background": "canvas",
+  "titlebar": "none",
+  "traffic_lights": [12, 8],
+  "terminal_padding": [14, 12],
+  "children": [
+    { "id": "status", "type": "block", "size": { "px": 28 }, "padding": [0, 76], "window_drag": true, "content": { "mod": "workspace-status" } },
+    {
+      "id": "main", "type": "block", "padding": [0, 8],
+      "content": { "tab": "active", "pane": {
+        "header": { "content": { "mod": "pane" }, "reveal": "hover", "height": 30, "position": "top" },
+        "background": "background", "border": { "width": 1, "color": "border" }, "focus": { "width": 1, "color": "accent" },
+        "radius": 10, "gap": 8, "lone": false } }
+    }
+  ],
+  "floating": [
+    { "id": "spaces-drawer", "content": { "mod": "spaces" }, "edge": "left", "align": "center", "peek": 52 },
+    { "id": "agents-drawer", "content": { "mod": "agents" }, "edge": "right", "align": "center", "peek": 52 }
+  ]
+}
