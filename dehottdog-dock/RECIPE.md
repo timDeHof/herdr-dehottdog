@@ -26,7 +26,7 @@ The root is a column on `canvas`, no system title bar, `[14, 12]` terminal paddi
   - working: listed under "Working" with a ring spinner in `working`.
   - idle: listed under "Idle" with a hollow ring in `idle`.
 - Clicking an agent focuses its pane. Clicking a space shows it.
-- Files in the tab bar shows the Files panel in the dock, and its button turns `selected`. Clicking it again hides the panel. Changes works the same way. Pressing one while the other is open switches the panel. The `tabs` mod remembers the choice per space.
+- Files in the tab bar shows the Files panel in the dock, and its button turns `selected`. Clicking it again is meant to hide the panel, but often doesn't (see Watch out). Changes works the same way. Pressing one while the other is open switches the panel. The `tabs` mod remembers the choice per space.
 - Dragging the dock's top edge resizes it between 120 and 520px. Dragging between dock columns resizes them.
 - Pane headers appear on hover and are drawn over the terminal, so the terminal never resizes.
 
@@ -41,6 +41,7 @@ The root is a column on `canvas`, no system title bar, `[14, 12]` terminal paddi
 
 - The Files and Changes buttons work only because the panel's nodes have the ids `panel` and `panel-body`. The shipped `tabs` mod looks those ids up and runs `layout.select {"stack":"panel-body"}` and `layout.show {"id":"panel"}` (`mods/tabs/main.js`, the `panelButton` function). With any other ids the buttons do nothing. Keep these names.
 - The panel shows Files or Changes, never both at once. That is how the shipped buttons work.
+- In Herdr 0.1.14, clicking the lit Files or Changes button often does nothing, and the panel stays open. The same happens in `dehottdog`, which uses the same shipped `tabs` mod, so the cause is in that mod or in Herdr, not in this layout. Close the panel with `herdr-app do layout.hide '{"id":"panel"}'`. Clicking the unlit button still switches the panel.
 - There is no `workspace-chrome`, so there is no Settings or Add machine button and no search button. Open them from the command palette (`cmd-shift-p`).
 - There is no node with id `sidebar`. `cmd-b` (toggle sidebar) does nothing here, and `spaces` and `agents` never draw their narrow rails.
 - The preview SVG doesn't follow the theme or light mode.
@@ -50,7 +51,7 @@ The root is a column on `canvas`, no system title bar, `[14, 12]` terminal paddi
 
 - `herdr-app do layout.switch '{"name":"dehottdog-dock"}'` shows the tab bar, the panes at full width, and a dock with Spaces and Agents above the status bar.
 - `herdr-app status` reports `"errors": []`, and there is no `layouts/dehottdog-dock.error`.
-- Files in the tab bar opens the Files panel as the dock's third column and highlights the button. Changes switches it to Changes. Clicking the lit button hides the panel.
+- Files in the tab bar opens the Files panel as the dock's third column and highlights the button. Changes switches it to Changes. `layout.hide {"id":"panel"}` hides the panel. Clicking the lit button is not a check: it often doesn't hide it (see Watch out).
 - `layout.resize {"id":"dock","px":120}` shrinks the dock and the panes grow.
 - Settings → Look shows the dehottdog-dock picture on its layout card.
 - An agent going working, blocked and done shows the spinner, "Needs you" pill and dot in the dock's Agents column.
