@@ -1,0 +1,5 @@
+{
+  "layout:dehottdog": {
+    "cmd-shift-b": "layout.toggle:right-sidebar"
+  }
+}
