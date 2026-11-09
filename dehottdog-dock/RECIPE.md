@@ -2,6 +2,8 @@
 
 Herdr with no sidebars. The terminals use the whole width of the window. Spaces, Agents and the Files/Changes panel sit side by side in a dock along the bottom, above the status bar. The Files and Changes buttons in the tab bar open their panel in the dock.
 
+![dehottdog-dock](preview.png)
+
 ## What you see
 
 Top to bottom:
